@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Using Registry and CDI elements to write the already existing registry keys. Using Parameter for new key creation. -->
+<Update Bank = "KOTAK" Checksum="" CreatedBy="Sneha" CreatedOn="28-01-2020" Customer="Combined" IUI="10.00" OS="Win10" VerifiedBy="" VerifiedOn="" Version="08.00">
+  <Description Details="This update is meant only for the Fresh installation. Make sure all the pre-requisites have been met..."/>
+  <Contacts Name="Switch Help Desk" Number="080 - 61574236 Ext : 74236" contact_Name="Kotak Switch Team - FIS"/>
+  <Contacts Name="Project Manager" Number="61954214/61954949" contact_Name="Ajay Patel"/>
+  <Contacts Name="MS Vendor" Number="022-61954340" contact_Name="NCR - Ravi Chandra"/>
+  <Contacts Name="Software Distribution" Number="NCR 022-66055788/89(D)PRIZM/Euronet Surendra Birwatkar:9320244704/Shweta Bhanage/Ajay Patel 022 61954662/022 61954949/EJ TEAM MEMBERS/Anurang/Leela/Euronet:Karan/Bharat/Vinod 09344542767/09344001718/09380766663/09361623409/09345177321/09380209605/044 39807607/044-39575009/044-39807607/49037488/49037416/9245177321/9344542767/9344001718/Prashant Singh-7045799170(TM Keys)Bios Password:-044-49037460/044-49037478/Basha-9380449217" contact_Name="Euronet (022-61997372/73)"/>
+  <Contacts Name="SNMP" Number="" contact_Name=""/>
+  <Contacts Name="Solidcore ePO/Hard Disk Encryption" Number="" contact_Name=""/>
+  <PreRequisite Details="This Update has to be loaded on IUI 10.00" Id="1"/>
+  <PreRequisite Details="Make sure that all the devices are connected and detected in SYSAPPS before installation." Id="2"/>
+  <PreRequisite Details="Change the setting in bios to boot only from primary Hard disk" Id="3"/>
+  <PreRequisite Details="Disable booting from any removable media." Id="4"/>
+  <PreRequisite Details="Set BIOS Password." Id="5"/>
+  <PreRequisite Details="Set Boot type as UEFI." Id="6"/>
+  <PreRequisite Details="Configure MEEI through SysApp menu." Id="7"/>
+  <CassetteConfiguration Details="200(1-Cassette)" Device="Dispenser" Type="1"/>
+  <CassetteConfiguration Details="100(1-Cassette)" Device="Dispenser" Type="2"/>
+  <CassetteConfiguration Details="500(1-Cassette)" Device="Dispenser" Type="3"/>
+  <CassetteConfiguration Details="2000(1-Cassette)" Device="Dispenser" Type="4"/>
+  <CassetteConfiguration Details="" Device="GBNA" Type="Cassette ID 1"/>
+  <CassetteConfiguration Details="" Device="GBNA" Type="Cassette ID 2"/>
+  <CassetteConfiguration Details="" Device="GBNA" Type="Cassette ID 3"/>
+  <CassetteConfiguration Details="" Device="GBNA" Type="Cassette ID 4"/>
+  <Install Enable="N" Id="1" Name="Bios_Upgrade">
+    <!--MANDATORY for all Updates-->
+    <Option Enable="Y" Id="1" Name="Estoril_Core_BIOS_Upgrade" Path="Resources\Bios_Upgrade" Version="">
+      <Command CommandString="C:\Temp\Resources\Bios_Upgrade\Bios_upgrade.vbs" Enable="Y" RebootRequired="N" SequenceId="1"/>
+    </Option>
+  </Install>
+  <Install Enable="N" Id="2" Name="OS_Patches">
+    <!--MANDATORY for all Updates-->
+    <Option Enable="Y" Id="1" Name="OS_Patches" Path="Resources\OS_Patch\Win7Patch" Version="">
+      <Command CommandString="C:\Temp\Resources\OS_Patch\Win7Patch\InstallOSPatches.bat" Enable="Y" RebootRequired="N" SequenceId="1"/>
+    </Option>
+  </Install>
+  <Install Enable="Y" Id="2" Name="SET_ATM_PROPERTIES">
+    <!--MANDATORY for all Updates-->
+    <Option Enable="Y" Id="1" Name="SET_ATM_PROPERTIES" Path="Resources\SET_ATM_PROPERTIES" Version="">
+      <Command CommandString="C:\Temp\Resources\SET_ATM_PROPERTIES\Delete_Callapp.bat" Enable="Y" RebootRequired="N" SequenceId="1"/>
+      <Command CommandString="C:\Temp\Resources\SET_ATM_PROPERTIES\Machine_properties.vbs" Enable="Y" RebootRequired="N" SequenceId="2"/>
+    </Option>
+  </Install>
+  <Install Enable="Y" Id="3" Name="Uninstall_XFS_CAM_SERVICE_PROVIDER">
+    <!--MANDATORY for all Updates-->
+    <Option Enable="Y" Id="1" Name="Uninstall_XFS_CAM_SERVICE_PROVIDER" Path="Resources\UNINSTALL" Version="">
+      <Command CommandString="C:\Temp\Resources\UNINSTALL\Uninstall_XFS_CamServiceProvider.vbs" Enable="Y" RebootRequired="N" SequenceId="1"/>
+    </Option>
+  </Install>
+  <Install Enable="Y" Id="4" Name="AXFS_PATCHES">
+    <!--MANDATORY for all Updates-->
+    <Option Enable="Y" Id="1" Name="Aptra_XFS_01.03_Patches" Path="Resources\AXFS_PATCHES" Version="">
+      <Command CommandString="C:\Temp\Resources\AXFS_PATCHES\Install_WIN10_AXFSPatches.vbs" Enable="Y" RebootRequired="Y" SequenceId="1"/>
+    </Option>
+  </Install>
+  <Install Enable="Y" Id="5" Name="AANDC_PATCHES">
+    <!--MANDATORY for all Updates-->
+    <Option Enable="Y" Id="3" Name="APTRA_Advance_NDC_05.01_Patches" Path="Resources\AANDC_PATCHES" Version="05.01.00">
+      <Command CommandString="C:\Temp\Resources\AANDC_PATCHES\Install_AANDCPatches_05.XX.vbs" Enable="Y" RebootRequired="N" SequenceId="1"/>
+    </Option>
+  </Install>
+  <Install Enable="Y" Id="6" Name="EMV_CAM2_EXITS">
+    <!--To be Enabled according to requirement if specified-->
+    <Option Enable="Y" Id="1" Name="EMV_CAM2_EXITS" Path="Resources\EMV_CAM2_EXITS" Version="93.00.01.36">
+      <Command CommandString="C:\Temp\Resources\EMV_CAM2_EXITS\Install_EMV.vbs" Enable="Y" RebootRequired="N" SequenceId="1"/>
+    </Option>
+  </Install>
+  <Install Enable="N" Id="7" Name="SELF_SERVICE_ASSISTANT">
+    <!--To be Enabled Only for BNA and BRM updates -->
+    <Option Enable="Y" Id="1" Name="SELF_SERVICE_ASSISTANT" Path="Resources\SELF_SERVICE_ASSISTANT" Version="02.12.00">
+      <Command CommandString="C:\Temp\Resources\SELF_SERVICE_ASSISTANT\Install_SSA.vbs" Enable="Y" RebootRequired="N" SequenceId="1"/>
+    </Option>
+  </Install>
+  <Install Enable="N" Id="8" Name="BRM_INDIA_TEMPLATE">
+    <!--To be Enabled Only for BRM updates -->
+    <Option Enable="Y" Id="1" Name="BRM_INDIA_TEMPLATE" Path="Resources\BRM_INDIA_TEMPLATE" Version="91.01.00.01">
+      <Command CommandString="C:\Temp\Resources\BRM_INDIA_TEMPLATE\Install_BRM.vbs" Enable="Y" RebootRequired="N" SequenceId="1"/>
+      <Verify Check="C:\Program Files" Enable="Y" Type="FILE" Value=""/>
+    </Option>
+  </Install>
+  <Install Enable="Y" Id="9" Name="MyAANDC">
+    <!--MANDATORY for all Updates and to be configured accordingly-->
+    <Option Enable="Y" Id="1" Name="AANDC_5.1.0_Customisations_Default" Path="Resources\AANDC_CUSTOMISATIONS\AANDC_5.X_Customisations" Version="01.00.00">
+      <Command CommandString="C:\TEMP\Resources\AANDC_CUSTOMISATIONS\AANDC_5.X_Customisations\Install_MyAANDC_Default.vbs" Enable="Y" RebootRequired="N" SequenceId="1"/>
+    </Option>
+    <Option Enable="N" Id="2" Name="AANDC_5.1.0_Customisations_Online" Path="Resources\AANDC_CUSTOMISATIONS\AANDC_5.X_Customisations" Version="01.00.00">
+      <Command CommandString="C:\TEMP\Resources\AANDC_CUSTOMISATIONS\AANDC_5.X_Customisations\Install_MyAANDC_ONLINEUSB.vbs" Enable="Y" RebootRequired="N" SequenceId="1"/>
+    </Option>
+    <Option Enable="N" Id="3" Name="AANDC_5.1.0_Customisations_Diebold" Path="Resources\AANDC_CUSTOMISATIONS\AANDC_5.X_Customisations" Version="01.00.00">
+      <Command CommandString="C:\TEMP\Resources\AANDC_CUSTOMISATIONS\AANDC_5.X_Customisations\Install_MyAANDC_DBD.vbs" Enable="Y" RebootRequired="N" SequenceId="1"/>
+    </Option>
+    <Option Enable="N" Id="4" Name="AANDC_5.1.0_Customisations_Wincore" Path="Resources\AANDC_CUSTOMISATIONS\AANDC_5.X_Customisations" Version="01.00.00">
+      <Command CommandString="C:\TEMP\Resources\AANDC_CUSTOMISATIONS\AANDC_5.X_Customisations\Install_MyAANDC_WNI.vbs" Enable="Y" RebootRequired="N" SequenceId="1"/>
+    </Option>
+  </Install>
+  <Install Enable="Y" Id="10" Name="AANDC_Config">
+    <!--MANDATORY for all Updates and to be configured accordingly-->
+    <Option Enable="Y" Id="1" Name="AANDC Config" Path="Resources\AANDC_CUSTOMISATIONS\AANDC_5.X_Customisations" Version="01.03.00">
+      <CDI Enable="Y" Name="Track 1" StoreId="3124" Value="3"/>
+      <!--'TRACK 1 - 3 (Auto-B) -->
+      <CDI Enable="Y" Name="Rollwidth" StoreId="3153" Value="40"/>
+      <CDI Enable="Y" Name="SetPrint" StoreId="3057" Value="3"/>
+      <CDI Enable="Y" Name="Message Mode Digit 1" StoreId="3087" Value="1"/>
+      <!--LeftColumn -->
+      <CDI Enable="Y" Name="Message Mode Digit 2" StoreId="1022" Value="1"/>
+      <CDI Enable="Y" Name="Message Mode Digit 3" StoreId="1023" Value="2"/>
+      <!-- VG -->
+      <CDI Enable="Y" Name="Message Mode Digit 4" StoreId="1024" Value="3"/>
+      <!--Cash Retract Enable-->
+      <CDI Enable="Y" Name="Message Mode Digit 5" StoreId="1025" Value="0"/>
+      <CDI Enable="Y" Name="Message Mode Digit 6" StoreId="1026" Value="0"/>
+      <CDI Enable="Y" Name="Message Mode Digit 7" StoreId="1027" Value="6"/>
+      <CDI Enable="Y" Name="Message Mode Digit 8" StoreId="1028" Value="4"/>
+      <CDI Enable="Y" Name="Message Mode Digit 9" StoreId="1029" Value="4"/>
+      <CDI Enable="Y" Name="ResetMode" StoreId="3108" Value="2"/>
+      <!--Reset mode - 2 NCR -->
+      <CDI Enable="Y" Name="SetJournal" StoreId="3073" Value="3"/>
+      <!-- Journal Modes: 0=None, 1=JP, 2=JP with Backup, 3=EJ Only, 4=Dual -->
+      <CDI Enable="Y" Name="Option80" StoreId="3756" Value="1"/>
+      <!-- To be Enabled Only for LOCAL VG -->
+      <CDI Enable="Y" Name="Option37" StoreId="3342" Value="1"/>
+      <!-- Print Track 2 to Journal -->
+      <CDI Enable="N" Name="Option44" StoreId="3218" Value="1"/>
+      <!-- BNA Journal Notes Count -->
+      <CDI Enable="N" Name="Option45" StoreId="1318" Value="79"/>
+      <!-- BNA Settings -->
+      <CDI Enable="Y" Name="Option71" StoreId="3762" Value="0"/>
+      <!-- Do you want more time screen -->
+      <CDI Enable="Y" Name="Set_Sup_Pwd" StoreId="3004" Value="1"/>
+      <!-- Setting Password For Supervisory -->
+      <CDI Enable="Y" Name="Sup_Pwd" StoreId="3001" Value="1778"/>
+      <Registry Enable="Y" Key="JournalLevel" Name="JournalLevel" Path="HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\NCR\Advance NDC" Type="REG_DWORD" Value="0"/>
+      <Registry Enable="Y" Key="EJLevel" Name="EJLevel" Path="HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\NCR\Advance NDC\" Type="REG_DWORD" Value="3"/>
+      <Registry Enable="Y" Key="EJMode" Name="EJMode" Path="HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\NCR\Advance NDC\EJOptions" Type="REG_DWORD" Value="1"/>
+      <Registry Enable="Y" Key="NoOfBackups" Name="NoOfBackups" Path="HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\NCR\Advance NDC\EJOptions" Type="REG_DWORD" Value="1000"/>
+      <Registry Enable="Y" Key="EJCompression" Name="EJCompression" Path="HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\NCR\Advance NDC\EJOptions" Type="REG_DWORD" Value="0"/>
+      <Registry Enable="Y" Key="EJBACKUPECP" Name="EJBACKUPECP" Path="HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\NCR\Advance NDC\EJOptions" Type="REG_DWORD" Value="0"/>
+      <Registry Enable="Y" Key="EJCutover" Name="EJCutover" Path="HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\NCR\Advance NDC\EJOptions" Type="REG_DWORD" Value="1"/>
+      <Registry Enable="Y" Key="EJAgent" Name="EJAgent" Path="HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\NCR\Advance NDC\EJOptions" Type="REG_DWORD" Value="1"/>
+      <Registry Enable="Y" Key="SecondaryBkp" Name="SecondaryBkp" Path="HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\NCR\Advance NDC\EJOptions" Type="REG_SZ" Value="M:"/>
+      <Registry Enable="Y" Key="FolderPath" Name="FolderPath" Path="HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\NCR\Advance NDC\EJOptions" Type="REG_SZ" Value="\SecEJBackups\"/>
+      <Registry Enable="Y" Key="MultipleDestination" Name="MultipleDestination" Path="HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\NCR\Advance NDC\EJOptions" Type="REG_DWORD" Value="1"/>
+      <Registry Enable="Y" Key="EJChecksum" Name="EJChecksum" Path="HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\NCR\Advance NDC\EJOptions" Type="REG_DWORD" Value="1"/>
+      <Registry Enable="Y" Key="EJFileSize" Name="EJFileSize" Path="HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\NCR\Advance NDC\EJOptions" Type="REG_DWORD" Value="4096"/>
+      <Registry Enable="Y" Key="EjectCD" Name="EjectCD" Path="HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\NCR\Advance NDC\EJOptions" Type="REG_DWORD" Value="1"/>
+      <Registry Enable="Y" Key="EJFileDateFormat" Name="EJFileDateFormat" Path="HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\NCR\Advance NDC\EJOptions" Type="REG_SZ" Value="yyyymmdd"/>
+      <Registry Enable="Y" Key="EJRecurrence" Name="EJRecurrence" Path="HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\NCR\Advance NDC\EJOptions\RecurrenceOptions" Type="REG_DWORD" Value="1"/>
+      <Registry Enable="Y" Key="EJRecurrencePattern" Name="EJRecurrencePattern" Path="HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\NCR\Advance NDC\EJOptions\RecurrenceOptions" Type="REG_DWORD" Value="1"/>
+      <Registry Enable="Y" Key="Time" Name="Time" Path="HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\NCR\Advance NDC\EJOptions\RecurrenceOptions" Type="REG_DWORD" Value="2358"/>
+      <Registry Enable="Y" Key="DOW" Name="DOW" Path="HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\NCR\Advance NDC\EJOptions\RecurrenceOptions" Type="REG_DWORD" Value="0"/>
+      <Registry Enable="Y" Key="DOM" Name="DOM" Path="HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\NCR\Advance NDC\EJOptions\RecurrenceOptions" Type="REG_DWORD" Value="1"/>
+    </Option>
+  </Install>
+  <Install Enable="Y" Id="31" Name="VOICE_GUIDENCE">
+    <!--To be Enabled and to be Configured  Only if VG Required -->
+    <Option Enable="Y" Id="1" Name="VOICE_GUIDENCE" Path="Resources\TEXT_TO_SPEECH_ENGINE" Version="01.00">
+      <Command CommandString="C:\TEMP\Resources\TEXT_TO_SPEECH_ENGINE\NUANCE\Install_Nuance.vbs" Enable="N" RebootRequired="N" SequenceId="1"/>
+      <Command CommandString="C:\TEMP\Resources\TEXT_TO_SPEECH_ENGINE\IndiaTTS\Install_IndiaTTS.bat" Enable="Y" RebootRequired="N" SequenceId="2"/>
+      <Registry Enable="Y" Key="Enable NHC VG" Name="Enable NHC VG" Path="HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\NCR\Advance NDC\NoHostChangeVG" Type="REG_DWORD" Value="00000001"/>
+      <Registry Enable="Y" Key="VGTimer00Multiplier" Name="VGTimer00Multiplier" Path="HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\NCR\Advance NDC\VoiceGuidance" Type="REG_DWORD" Value="00000000"/>
+      <Registry Enable="Y" Key="VGNextState" Name="VG Next State" Path="HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\NCR\VG" Type="REG_SZ" Value="4068"/>
+      <Registry Enable="N" Key="Translator" Name="Translator" Path="HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\NCR\IndiaVC" Type="REG_DWORD" Value="00000000"/>
+    </Option>
+  </Install>
+  <Install Enable="Y" Id="41" Name="SECURITY_FOR_APTRA">
+    <!--MANDATORY for all Updates excluding for IUI 5.1-->
+    <Option Enable="Y" Id="1" Name="SECURITY_FOR_APTRA" Path="Resources\SECURITY_FOR_APTRA" Version="">
+      <Command CommandString="C:\Temp\Resources\SECURITY_FOR_APTRA\Install_Security_05.00.vbs" Enable="Y" RebootRequired="Y" SequenceId="1"/>
+    </Option>
+  </Install>
+  <Install Enable="N" Id="20" Name="UnifiedAgentWS">
+    <!--To be Enabled Only if Predective services Required -->
+    <Option Enable="Y" Id="1" Name="UnifiedAgentWS" Path="Resources\UnifiedAgentWS\LVB\PredictiveServices" Version="">
+      <Command CommandString="C:\Temp\Resources\UnifiedAgentWS\LVB\PredictiveServices\SetAggr.bat" Enable="Y" RebootRequired="N" SequenceId="1"/>
+      <Command CommandString="C:\Temp\Resources\UnifiedAgentWS\LVB\PredictiveServices\CopyPD.vbs" Enable="Y" RebootRequired="N" SequenceId="2"/>
+      <Command CommandString="C:\Temp\Resources\UnifiedAgentWS\LVB\PredictiveServices\install_predictives.vbs" Enable="Y" RebootRequired="Y" SequenceId="2"/>
+    </Option>
+  </Install>
+  <Install Enable="Y" Id="12" Name="CARDLESS">
+    <!--To be Enabled according to requirement is specified-->
+    <Option Enable="Y" Id="1" Name="CARDLESS" Path="" Version="">
+      <Registry Enable="Y" Key="Active FDK Mask" Name="ACTIVE FDK MASK" Path="HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\NCR\Advance NDC\Extensions\Cardless Transaction" Type="REG_DWORD" Value="8"/>
+      <Registry Enable="Y" Key="Active PIN Pad Key Mask" Name="Active PIN Pad Key Mask" Path="HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\NCR\Advance NDC\Extensions\Cardless Transaction" Type="REG_DWORD" Value="0"/>
+      <Registry Enable="Y" Key="Next State Number" Name="Next State Number" Path="HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\NCR\Advance NDC\Extensions\Cardless Transaction" Type="REG_SZ" Value="246"/>
+      <Registry Enable="Y" Key="SkipFitSearch" Name="SkipFitSearch" Path="HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\NCR\Advance NDC\Extensions\Cardless Transaction" Type="REG_DWORD" Value="1"/>
+      <Registry Enable="Y" Key="Track 2 Data" Name="Track 2 Data" Path="HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\NCR\Advance NDC\Extensions\Cardless Transaction" Type="REG_SZ" Value="7777777777777777=204910110000234"/>
+    </Option>
+  </Install>
+  <Install Enable="Y" Id="13" Name="NVIGIL">
+    <!--MANDATORY for all Updates-->
+    <Option Enable="Y" Id="1" Name="NVIGIL" Path="Resources\NVIGIL" Version="05.05.00">
+      <Command CommandString="C:\Temp\Resources\NVIGIL\Install_NVigil.vbs" Enable="Y" RebootRequired="N" SequenceId="1"/>
+    </Option>
+  </Install>
+  <Install Enable="Y" Id="14" Name="Stinger">
+    <!--To be Enabled according to requirement if specified-->
+    <Option Enable="Y" Id="1" Name="Stinger" Path="Resources\Stinger" Version=" 02.02.00">
+      <Command CommandString="C:\Temp\Resources\Stinger\Install_Stinger.vbs" Enable="Y" RebootRequired="N" SequenceId="1"/>
+    </Option>
+  </Install>
+  <Install Enable="Y" Id="15" Name="SOFTWARE_DISTRIBUTION_AGENTS">
+    <!--To be configured according to requirement if specified-->
+    <Option Enable="Y" Id="1" Name="eAgent_1.0.50" Path="Resources\SWDAGENTS\eAgent_1.0.50" Version="">
+      <Command CommandString="C:\Temp\Resources\SWDAGENTS\eAgent_1.0.50\setup.bat" Enable="Y" RebootRequired="N" SequenceId="1"/>
+    </Option>
+    <Option Enable="Y" Id="2" Name="Prima_Agent" Path="Resources\SWDAGENTS\PRIMA_Agent_V307" Version="03.00.07">
+      <Command CommandString="C:\Temp\Resources\SWDAGENTS\PRIMA_Agent_V307\AggreSetTrue.bat" Enable="Y" RebootRequired="N" SequenceId="1"/>
+      <Command CommandString="C:\Temp\Resources\SWDAGENTS\PRIMA_Agent_V307\Install_Prima.vbs" Enable="Y" RebootRequired="Y" SequenceId="2"/>
+      <Command CommandString="C:\Temp\Resources\SWDAGENTS\PRIMA_Agent_V307\Sleep.vbs" Enable="Y" RebootRequired="N" SequenceId="3"/>
+    </Option>
+  </Install>
+  <Install Enable="Y" Id="35" Name="DNS">
+    <Option Enable="Y" Id="1" Name="DNS" Path="Resources\DNS" Version="">
+      <Command CommandString="C:\Temp\Resources\DNS\SetDNS_Win10.vbs" Enable="Y" RebootRequired="N" SequenceId="1"/>
+      <Parameter Enable="Y" Name="HostName" Value="switch.kbank.kotakgroup.com"/>
+      <Parameter Enable="Y" Name="Primary IP" Value="10.240.8.23"/>
+      <Parameter Enable="Y" Name="Secondary IP" Value="10.50.8.16"/>
+    </Option>
+  </Install>
+  <Install Enable="N" Id="16" Name="Password Management Agent">
+    <!--To be configured according to requirement if specified-->
+    <Option Enable="Y" Id="1" Name="Password Management Agent" Path="Resources\PASSWORD_MANAGEMENT_AGENT" Version="02.00.0000">
+      <Command CommandString="C:\Temp\Resources\PASSWORD_MANAGEMENT_AGENT\Install_Default_PWM.vbs" Enable="N" RebootRequired="N" SequenceId="1"/>
+      <Command CommandString="C:\Temp\Resources\PASSWORD_MANAGEMENT_AGENT\Install_BOB_PWM.vbs" Enable="N" RebootRequired="N" SequenceId="2"/>
+      <Command CommandString="C:\Temp\Resources\PASSWORD_MANAGEMENT_AGENT\Install_NCR_PWM.vbs" Enable="Y" RebootRequired="N" SequenceId="3"/>
+      <Command CommandString="C:\Temp\Resources\PASSWORD_MANAGEMENT_AGENT\Install_CITI_PWM.vbs" Enable="N" RebootRequired="N" SequenceId="4"/>
+      <Command CommandString="C:\Temp\Resources\PASSWORD_MANAGEMENT_AGENT\Install_FSS_PWM.vbs" Enable="N" RebootRequired="N" SequenceId="5"/>
+      <Command CommandString="C:\Temp\Resources\PASSWORD_MANAGEMENT_AGENT\Install_Hitachi_PWM.vbs" Enable="N" RebootRequired="N" SequenceId="6"/>
+      <Command CommandString="C:\Temp\Resources\PASSWORD_MANAGEMENT_AGENT\Install_Kotak_PWM.vbs" Enable="N" RebootRequired="N" SequenceId="7"/>
+      <Command CommandString="C:\Temp\Resources\PASSWORD_MANAGEMENT_AGENT\Install_Mphasis_PWM.vbs" Enable="N" RebootRequired="N" SequenceId="8"/>
+      <Command CommandString="C:\Temp\Resources\PASSWORD_MANAGEMENT_AGENT\Install_SBI_PWM.vbs" Enable="N" RebootRequired="N" SequenceId="9"/>
+      <Command CommandString="C:\Temp\Resources\PASSWORD_MANAGEMENT_AGENT\Install_Euronet_PWM.vbs" Enable="N" RebootRequired="N" SequenceId="10"/>
+    </Option>
+  </Install>
+  <Install Enable="N" Id="19" Name="CurrencyConfiguration">
+    <!--To be Enabled and to be Configured  Only if BRM Required -->
+    <Option Enable="Y" Id="1" Name="CurrencyConfiguration" Path="" Version="">
+      <Registry Enable="Y" Key="CurrencyID" Name="CurrencyID" Path="HKEY_LOCAL_MACHINE\SOFTWARE\NCR\Advance NDC\CurrencyTable\NDCType1" Type="REG_SZ" Value="INR"/>
+      <Registry Enable="Y" Key="Value" Name="CurrencyTable" Path="HKEY_LOCAL_MACHINE\SOFTWARE\NCR\Advance NDC\CurrencyTable\NDCType1" Type="REG_SZ" Value="50"/>
+      <Registry Enable="Y" Key="CurrencyID" Name="CurrencyID" Path="HKEY_LOCAL_MACHINE\SOFTWARE\NCR\Advance NDC\CurrencyTable\NDCType2" Type="REG_SZ" Value="INR"/>
+      <Registry Enable="Y" Key="Value" Name="CurrencyTable" Path="HKEY_LOCAL_MACHINE\SOFTWARE\NCR\Advance NDC\CurrencyTable\NDCType2" Type="REG_SZ" Value="100"/>
+      <Registry Enable="Y" Key="CurrencyID" Name="CurrencyID" Path="HKEY_LOCAL_MACHINE\SOFTWARE\NCR\Advance NDC\CurrencyTable\NDCType3" Type="REG_SZ" Value="INR"/>
+      <Registry Enable="Y" Key="Value" Name="CurrencyTable" Path="HKEY_LOCAL_MACHINE\SOFTWARE\NCR\Advance NDC\CurrencyTable\NDCType3" Type="REG_SZ" Value="500"/>
+      <Registry Enable="Y" Key="CurrencyID" Name="CurrencyID" Path="HKEY_LOCAL_MACHINE\SOFTWARE\NCR\Advance NDC\CurrencyTable\NDCType4" Type="REG_SZ" Value="INR"/>
+      <Registry Enable="Y" Key="Value" Name="CurrencyTable" Path="HKEY_LOCAL_MACHINE\SOFTWARE\NCR\Advance NDC\CurrencyTable\NDCType4" Type="REG_SZ" Value="2000"/>
+      <Registry Enable="Y" Key="CurrencyIDType1" Name="CurrencyIDType1" Path="HKEY_CLASSES_ROOT\WOSA/XFS_ROOT\SERVICE_PROVIDERS\CDM\GENERAL_CONFIGS" Type="REG_SZ" Value="INR"/>
+      <Registry Enable="Y" Key="ValuesType1" Name="CurrencyTableValues" Path="HKEY_CLASSES_ROOT\WOSA/XFS_ROOT\SERVICE_PROVIDERS\CDM\GENERAL_CONFIGS" Type="REG_SZ" Value="50"/>
+      <Registry Enable="Y" Key="CurrencyIDType2" Name="CurrencyIDType2" Path="HKEY_CLASSES_ROOT\WOSA/XFS_ROOT\SERVICE_PROVIDERS\CDM\GENERAL_CONFIGS" Type="REG_SZ" Value="INR"/>
+      <Registry Enable="Y" Key="ValuesType2" Name="CurrencyTableValues" Path="HKEY_CLASSES_ROOT\WOSA/XFS_ROOT\SERVICE_PROVIDERS\CDM\GENERAL_CONFIGS" Type="REG_SZ" Value="100"/>
+      <Registry Enable="Y" Key="CurrencyIDType3" Name="CurrencyIDType3" Path="HKEY_CLASSES_ROOT\WOSA/XFS_ROOT\SERVICE_PROVIDERS\CDM\GENERAL_CONFIGS" Type="REG_SZ" Value="INR"/>
+      <Registry Enable="Y" Key="ValuesType3" Name="CurrencyTableValues" Path="HKEY_CLASSES_ROOT\WOSA/XFS_ROOT\SERVICE_PROVIDERS\CDM\GENERAL_CONFIGS" Type="REG_SZ" Value="500"/>
+      <Registry Enable="Y" Key="CurrencyIDType4" Name="CurrencyIDType4" Path="HKEY_CLASSES_ROOT\WOSA/XFS_ROOT\SERVICE_PROVIDERS\CDM\GENERAL_CONFIGS" Type="REG_SZ" Value="INR"/>
+      <Registry Enable="Y" Key="ValuesType4" Name="CurrencyTableValues" Path="HKEY_CLASSES_ROOT\WOSA/XFS_ROOT\SERVICE_PROVIDERS\CDM\GENERAL_CONFIGS" Type="REG_SZ" Value="2000"/>
+      <Registry Enable="Y" Key="CurrencyIDType1" Name="CurrencyIDType1" Path="HKEY_CLASSES_ROOT\WOSA/XFS_ROOT\SERVICE_PROVIDERS\CDM2\GENERAL_CONFIGS" Type="REG_SZ" Value="INR"/>
+      <Registry Enable="Y" Key="ValuesType1" Name="CurrencyTableValues" Path="HKEY_CLASSES_ROOT\WOSA/XFS_ROOT\SERVICE_PROVIDERS\CDM2\GENERAL_CONFIGS" Type="REG_SZ" Value="50"/>
+      <Registry Enable="Y" Key="CurrencyIDType2" Name="CurrencyIDType2" Path="HKEY_CLASSES_ROOT\WOSA/XFS_ROOT\SERVICE_PROVIDERS\CDM2\GENERAL_CONFIGS" Type="REG_SZ" Value="INR"/>
+      <Registry Enable="Y" Key="ValuesType2" Name="CurrencyTableValues" Path="HKEY_CLASSES_ROOT\WOSA/XFS_ROOT\SERVICE_PROVIDERS\CDM2\GENERAL_CONFIGS" Type="REG_SZ" Value="100"/>
+      <Registry Enable="Y" Key="CurrencyIDType3" Name="CurrencyIDType3" Path="HKEY_CLASSES_ROOT\WOSA/XFS_ROOT\SERVICE_PROVIDERS\CDM2\GENERAL_CONFIGS" Type="REG_SZ" Value="INR"/>
+      <Registry Enable="Y" Key="ValuesType3" Name="CurrencyTableValues" Path="HKEY_CLASSES_ROOT\WOSA/XFS_ROOT\SERVICE_PROVIDERS\CDM2\GENERAL_CONFIGS" Type="REG_SZ" Value="500"/>
+      <Registry Enable="Y" Key="CurrencyIDType4" Name="CurrencyIDType4" Path="HKEY_CLASSES_ROOT\WOSA/XFS_ROOT\SERVICE_PROVIDERS\CDM2\GENERAL_CONFIGS" Type="REG_SZ" Value="INR"/>
+      <Registry Enable="Y" Key="ValuesType4" Name="CurrencyTableValues" Path="HKEY_CLASSES_ROOT\WOSA/XFS_ROOT\SERVICE_PROVIDERS\CDM2\GENERAL_CONFIGS" Type="REG_SZ" Value="2000"/>
+      <Registry Enable="Y" Key="CurrencyIDType1" Name="CurrencyIDType1" Path="HKEY_LOCAL_MACHINE\SOFTWARE\NCR\XFS CDM Service Provider\XFS-DeviceControl\CDM\GENERAL_CONFIGS" Type="REG_SZ" Value="INR"/>
+      <Registry Enable="Y" Key="CurrencyIDType2" Name="CurrencyIDType2" Path="HKEY_LOCAL_MACHINE\SOFTWARE\NCR\XFS CDM Service Provider\XFS-DeviceControl\CDM\GENERAL_CONFIGS" Type="REG_SZ" Value="INR"/>
+      <Registry Enable="Y" Key="CurrencyIDType3" Name="CurrencyIDType3" Path="HKEY_LOCAL_MACHINE\SOFTWARE\NCR\XFS CDM Service Provider\XFS-DeviceControl\CDM\GENERAL_CONFIGS" Type="REG_SZ" Value="INR"/>
+      <Registry Enable="Y" Key="CurrencyIDType4" Name="CurrencyIDType4" Path="HKEY_LOCAL_MACHINE\SOFTWARE\NCR\XFS CDM Service Provider\XFS-DeviceControl\CDM\GENERAL_CONFIGS" Type="REG_SZ" Value="INR"/>
+      <Registry Enable="Y" Key="ValuesType1" Name="CurrencyTableValues" Path="HKEY_LOCAL_MACHINE\SOFTWARE\NCR\XFS CDM Service Provider\XFS-DeviceControl\CDM\GENERAL_CONFIGS" Type="REG_SZ" Value="00000050"/>
+      <Registry Enable="Y" Key="ValuesType2" Name="CurrencyTableValues" Path="HKEY_LOCAL_MACHINE\SOFTWARE\NCR\XFS CDM Service Provider\XFS-DeviceControl\CDM\GENERAL_CONFIGS" Type="REG_SZ" Value="00000100"/>
+      <Registry Enable="Y" Key="ValuesType3" Name="CurrencyTableValues" Path="HKEY_LOCAL_MACHINE\SOFTWARE\NCR\XFS CDM Service Provider\XFS-DeviceControl\CDM\GENERAL_CONFIGS" Type="REG_SZ" Value="00000500"/>
+      <Registry Enable="Y" Key="ValuesType4" Name="CurrencyTableValues" Path="HKEY_LOCAL_MACHINE\SOFTWARE\NCR\XFS CDM Service Provider\XFS-DeviceControl\CDM\GENERAL_CONFIGS" Type="REG_SZ" Value="00002000"/>
+      <Registry Enable="Y" Key="CurrencyIDType1" Name="CurrencyIDType1" Path="HKEY_LOCAL_MACHINE\SOFTWARE\NCR\XFS CDM2 Service Provider\XFS-DeviceControl\CDM2\GENERAL_CONFIGS" Type="REG_SZ" Value="INR"/>
+      <Registry Enable="Y" Key="CurrencyIDType2" Name="CurrencyIDType2" Path="HKEY_LOCAL_MACHINE\SOFTWARE\NCR\XFS CDM2 Service Provider\XFS-DeviceControl\CDM2\GENERAL_CONFIGS" Type="REG_SZ" Value="INR"/>
+      <Registry Enable="Y" Key="CurrencyIDType3" Name="CurrencyIDType3" Path="HKEY_LOCAL_MACHINE\SOFTWARE\NCR\XFS CDM2 Service Provider\XFS-DeviceControl\CDM2\GENERAL_CONFIGS" Type="REG_SZ" Value="INR"/>
+      <Registry Enable="Y" Key="CurrencyIDType4" Name="CurrencyIDType4" Path="HKEY_LOCAL_MACHINE\SOFTWARE\NCR\XFS CDM2 Service Provider\XFS-DeviceControl\CDM2\GENERAL_CONFIGS" Type="REG_SZ" Value="INR"/>
+      <Registry Enable="Y" Key="ValuesType1" Name="CurrencyTableValues" Path="HKEY_LOCAL_MACHINE\SOFTWARE\NCR\XFS CDM2 Service Provider\XFS-DeviceControl\CDM2\GENERAL_CONFIGS" Type="REG_SZ" Value="00000050"/>
+      <Registry Enable="Y" Key="ValuesType2" Name="CurrencyTableValues" Path="HKEY_LOCAL_MACHINE\SOFTWARE\NCR\XFS CDM2 Service Provider\XFS-DeviceControl\CDM2\GENERAL_CONFIGS" Type="REG_SZ" Value="00000100"/>
+      <Registry Enable="Y" Key="ValuesType3" Name="CurrencyTableValues" Path="HKEY_LOCAL_MACHINE\SOFTWARE\NCR\XFS CDM2 Service Provider\XFS-DeviceControl\CDM2\GENERAL_CONFIGS" Type="REG_SZ" Value="00000500"/>
+      <Registry Enable="Y" Key="ValuesType4" Name="CurrencyTableValues" Path="HKEY_LOCAL_MACHINE\SOFTWARE\NCR\XFS CDM2 Service Provider\XFS-DeviceControl\CDM2\GENERAL_CONFIGS" Type="REG_SZ" Value="00002000"/>
+    </Option>
+  </Install>
+  <Install Enable="Y" Id="20" Name="SM_PRIMITIVES">
+    <!--MANDATORY for all Updates-->
+    <Option Enable="Y" Id="1" Name="SM_PRIMITIVES" Path="Resources\SM_PRIMITIVES" Version="">
+      <Command CommandString="C:\Temp\Resources\SM_PRIMITIVES\Install_SMPrimitives.vbs" Enable="Y" RebootRequired="N" SequenceId="1"/>
+      <!--To be Enabled Only for Win-10 updates -->
+      <Command CommandString="C:\Temp\Resources\SM_PRIMITIVES\TTS_Script.vbs" Enable="Y" RebootRequired="N" SequenceId="2"/>
+    </Option>
+  </Install>
+  <Install Enable="Y" Id="21" Name="INDIA_SECURITY_POLICY">
+    <Option Enable="Y" Id="1" Name="INDIA_SECURITY_POLICY" Path="Resources\INDIA_SECURITY_POLICY" Version="">
+      <Command CommandString="C:\Temp\Resources\INDIA_SECURITY_POLICY\Apply_W10_Policies.vbs" Enable="Y" RebootRequired="N" SequenceId="1"/>
+    </Option>
+  </Install>
+  <Install Enable="Y" Id="37" Name="SCREENS">
+    <!--MANDATORY for all Updates Need to be configured as per bank requirement-->
+    <Option Enable="Y" Id="1" Name="English and Hindi" Path="Resources\SCREENS\Kotak" Version="">
+      <Command CommandString="C:\Temp\Resources\SCREENS\Kotak\Install_Kotak_ENGHIN_SCREENS.vbs" Enable="Y" RebootRequired="N" SequenceId="1"/>
+    </Option>
+    <Option Enable="Y" Id="2" Name="English Hindi and Bengali" Path="Resources\SCREENS\Kotak" Version="">
+      <Command CommandString="C:\Temp\Resources\SCREENS\Kotak\Install_Kotak_ENGHINBEN_SCREENS.vbs" Enable="Y" RebootRequired="N" SequenceId="1"/>
+    </Option>
+    <Option Enable="Y" Id="3" Name="English Hindi and Gujarathi" Path="Resources\SCREENS\Kotak" Version="">
+      <Command CommandString="C:\Temp\Resources\SCREENS\Kotak\Install_Kotak_ENGHINGUJ_SCREENS.vbs" Enable="Y" RebootRequired="N" SequenceId="1"/>
+    </Option>
+    <Option Enable="Y" Id="4" Name="English Hindi and Kannada" Path="Resources\SCREENS\Kotak" Version="">
+      <Command CommandString="C:\Temp\Resources\SCREENS\Kotak\Install_Kotak_ENGHINKAN_SCREENS.vbs" Enable="Y" RebootRequired="N" SequenceId="1"/>
+    </Option>
+    <Option Enable="Y" Id="5" Name="English Hindi and Malayalam" Path="Resources\SCREENS\Kotak" Version="">
+      <Command CommandString="C:\Temp\Resources\SCREENS\Kotak\Install_Kotak_ENGHINMAL_SCREENS.vbs" Enable="Y" RebootRequired="N" SequenceId="1"/>
+    </Option>
+    <Option Enable="Y" Id="6" Name="English Hindi and Marati" Path="Resources\SCREENS\Kotak" Version="">
+      <Command CommandString="C:\Temp\Resources\SCREENS\Kotak\Install_Kotak_ENGHINMAR_SCREENS.vbs" Enable="Y" RebootRequired="N" SequenceId="1"/>
+    </Option>
+    <Option Enable="Y" Id="7" Name="English Hindi and Punjab" Path="Resources\SCREENS\Kotak" Version="">
+      <Command CommandString="C:\Temp\Resources\SCREENS\Kotak\Install_Kotak_ENGHINPUN_SCREENS.vbs" Enable="Y" RebootRequired="N" SequenceId="1"/>
+    </Option>
+    <Option Enable="Y" Id="8" Name="English Hindi and Tamil" Path="Resources\SCREENS\Kotak" Version="">
+      <Command CommandString="C:\Temp\Resources\SCREENS\Kotak\Install_Kotak_ENGHINTAM_SCREENS.vbs" Enable="Y" RebootRequired="N" SequenceId="1"/>
+    </Option>
+    <Option Enable="Y" Id="9" Name="English Hindi and Telugu" Path="Resources\SCREENS\Kotak" Version="">
+      <Command CommandString="C:\Temp\Resources\SCREENS\Kotak\Install_Kotak_ENGHINTEL_SCREENS.vbs" Enable="Y" RebootRequired="N" SequenceId="1"/>
+    </Option>
+    <Option Enable="Y" Id="10" Name="English Hindi and Assame" Path="Resources\SCREENS\Kotak" Version="">
+      <Command CommandString="C:\Temp\Resources\SCREENS\Kotak\Install_Kotak_ENGHINASS_SCREENS.vbs" Enable="Y" RebootRequired="N" SequenceId="1"/>
+    </Option>
+    <Option Enable="Y" Id="11" Name="English Hindi and Oriya" Path="Resources\SCREENS\Kotak" Version="">
+      <Command CommandString="C:\Temp\Resources\SCREENS\Kotak\Install_Kotak_ENGHINORI_SCREENS.vbs" Enable="Y" RebootRequired="N" SequenceId="1"/>
+    </Option>
+  </Install>
+  <Install Enable="N" Id="22" Name="SOLIDCORE_INSTALLER">
+    <!--To be configured according to requirement is specified-->
+    <Option Enable="Y" Id="1" Name="SOLIDCORE_INSTALLER" Path="Resources\SOLIDCORE_INSTALLER" Version="06.01.00">
+      <!--Latest-->
+      <Command CommandString="C:\Temp\Resources\SOLIDCORE_INSTALLER\Install_Solidcore_06.01.00.vbs" Enable="Y" RebootRequired="Y" SequenceId="1"/>
+    </Option>
+    <Option Enable="N" Id="1" Name="SOLIDCORE_INSTALLER" Path="Resources\SOLIDCORE_INSTALLER" Version="06.00.00">
+      <!--Latest-->
+      <Command CommandString="C:\Temp\Resources\SOLIDCORE_INSTALLER\Install_Solidcore_06.00.00.vbs" Enable="Y" RebootRequired="Y" SequenceId="1"/>
+    </Option>
+  </Install>
+  <Install Enable="Y" Id="23" Name="Installation_Finalize">
+    <!--MANDATORY for all Updates-->
+    <Option Enable="Y" Id="1" Name="CLEANUP" Path="Resources\Installation_Finalize" Version="">
+      <Command CommandString="C:\Temp\Resources\Installation_Finalize\SetFolderAccess.vbs" Enable="Y" RebootRequired="N" SequenceId="1"/>
+      <Command CommandString="C:\Temp\Resources\Installation_Finalize\Copy_System_Cleanup.vbs" Enable="Y" RebootRequired="N" SequenceId="2"/>
+      <Command CommandString="C:\Temp\Installation_Finalize\System_Cleanup.vbs" Enable="Y" RebootRequired="N" SequenceId="3"/>
+    </Option>
+  </Install>
+  <Install Enable="N" Id="24" Name="ENABLE_SOLIDCORE">
+    <!--To be Enabled only If solidcore required -->
+    <Option Enable="Y" Id="1" Name="ENABLE_SOLIDCORE_STANDALONE" Path="Resources\ENABLE_SOLIDCORE" Version="">
+      <Command CommandString="C:\Temp\ENABLE_SOLIDCORE\Enable_Solidcore.vbs" Enable="Y" RebootRequired="N" SequenceId="1"/>
+      <!--To be Enabled accordingly -->
+    </Option>
+    <Option Enable="N" Id="2" Name="ENABLE_SOLIDCORE_EPO" Path="Resources\ENABLE_SOLIDCORE" Version="">
+      <Command CommandString="C:\Temp\ENABLE_SOLIDCORE\Enable_SolidcoreEPO.vbs" Enable="Y" RebootRequired="N" SequenceId="1"/>
+      <!--To be Enabled accordingly -->
+    </Option>
+  </Install>
+  <Install Enable="N" Id="25" Name="HARDDISK_ENCRYPTION">
+    <Option Enable="Y" Id="1" Name="HARDDISK_ENCRYPTION_OFFLINE" Path="Resources\HARD_DISK_ENCRYPTION\NCR Secure HDE Client" Version="">
+      <Command CommandString="C:\Temp\ENABLE_SOLIDCORE\Set_SC_UpdateMode.bat" Enable="Y" RebootRequired="N" SequenceId="1"/>
+      <Command CommandString="C:\Temp\HARD_DISK_ENCRYPTION\NCR Secure HDE Client\Install_HDE.vbs 02.01.00 OFFLINE" Enable="Y" RebootRequired="N" SequenceId="2"/>
+      <Command CommandString="C:\Temp\ENABLE_SOLIDCORE\Solidify_EU.bat" Enable="Y" RebootRequired="N" SequenceId="3"/>
+    </Option>
+  </Install>
+</Update>

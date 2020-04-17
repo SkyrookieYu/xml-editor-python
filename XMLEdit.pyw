@@ -23,7 +23,9 @@ import bs4
 import json
 import time
 import sys
+import types
 from  pagination import *
+
 
 # Page label states
 NOT_SELECTED = 0
@@ -269,8 +271,6 @@ class GUI(tk.Frame):
 
     def return_gen(self):
         children = list(filter(istag, self.Mstart.children))
-        self.total_len = len(children)
-        print('Total Items in children :',self.total_len) 
         for child in children:
             yield child
 
@@ -309,72 +309,25 @@ class GUI(tk.Frame):
                 lbl.pack(fill=tk.X)
             hlm.pack()
         
-        
-            
+        children = list(filter(istag, self.Mstart.children))
+        self.total_len = len(children)
+        print('Total Items in children :',self.total_len) 
         
         #self.core.pack()
         
-        self.core = self.make_label_frame(self.display, self.Mstart)
-        self.core.pack()
+        #self.core = self.make_label_frame(self.display, self.Mstart)
+        #self.core.pack()
         self.display.pack(pady=10,expand=True, fill=tk.BOTH)
-        self.page = Pagination(self.data_frame, 1, 100, command=self.print_page, pagination_style=pagination_style2)
-        self.page.pack(pady=10,expand=True, fill=tk.BOTH)
+        min=0
+        #if self.total_len > 5:
 
-        #self.core.pack()
+        self.page = Pagination(self.data_frame, 5, 5, command=self.my_display, pagination_style=pagination_style2)
+        #self.page.pack(pady=10,expand=True, fill=tk.BOTH)
+
+        self.page.pack()
         
     
-    def print_page(self,page_number):
-        print("yahooooooooooooo")
-        #children = list(filter(istag, self.Mstart.children))
-        self.display.destroy()
-        self.display = VerticalScrolledFrame(self.data_frame)
-        frame = ttk.LabelFrame(self.display, text=self.Mstart)
-        #self.display.destroy()
-        #frame = tk.Frame(self.row)
- 
-       
-        #hlm.columnconfigure(0, weight=1)
-        #self.make(hlm, self.Mstart)
-        #hlm.pack(side=tk.RIGHT)
-        idx = 0
-        if self.page_size >= self.attr_size:
-            print('Makin Page Size back to zero')
-            self.page_size  = 0
-            #self.display.option_clear()
-        
-        num_attributes = len(self.Mstart.attrs)
-        num_text = 0 if self.Mstart.string is None else 1
-        if debug:
-            print("{}: {} attributes; {} text; {} grandchildren".format(self.Mstart.name, num_attributes, num_text, len(children)))
-        print(self.childe)
-        child = next(self.childe)
-        if len(child) == 0:
-            child = next(self.childe)
-            
-        print(len(child))
-        num_children = len(child.findChildren()) + len(child.attrs)
-        if num_children == 0 and child.string is not None:
-                # special case of only 1 text - making entry
-            idx = self.make_entry(frame, self.page_nav, child.name, child.string.strip(), partial(self.change_attr, child, None))
-            print('idxxxxxxxx :',idx)
-        elif num_children > 0:
-                # child has one attribute or one grandchild; make new frame
-            print("Goooooooooooooogle :",self.page_nav)
-            #self.core.pack()
-            h = self.make_label_frame(frame, child)
-            h.grid(row=self.page_nav, column=0, columnspan=2, sticky='ew', padx=10, pady=10)
-            #self.page.pack()
-            self.page_nav += 1
-        frame.pack()
-        #self.display = VerticalScrolledFrame(self.data_frame)
-        self.display.pack(pady=10,expand=True, fill=tk.BOTH)
-        
-
-        self.status.set("Loaded {} elements".format(len(AutoSelectEntry.elements)))
-
-        print("page number ",page_number)
-        self.page_number = page_number
-
+    
 
     def save(self, event=None):
         print("Saving data")
@@ -422,55 +375,59 @@ class GUI(tk.Frame):
             element.dirty = False
 
         self.status.set("File backed up and saved.")
-
-    def make(self, frame, bs):
+    
+    def making_item(self, frame, bs):
         
-        #children = list(filter(istag, bs.children))
+        
+        children = list(filter(istag, bs))
         idx = 0
         num_attributes = len(bs.attrs)
+        num_text = 0 if bs.string is None else 1
+        if debug:
+            print("{}: {} attributes; {} text; {} grandchildren".format(bs.name, num_attributes, num_text, len(children)))
 
         # list out the attributes, then text, then grandchildren.
-        #print('Length {}'.format(len(bs.attrs)))
+        print('Att size {}'.format(num_attributes))
         print('Dict {}'.format(bs.attrs))
-        self.attr_size = num_attributes
         for attr, value in bs.attrs.items():
-            #print(attr)
-            #print('Value :',value)
             # attribute entry
-            #print("called for Page Number {}: Item Number{}".format(self.page_number,self.page_size))
-            #if self.page_size < self.attr_size:
-            idx = self.make_entry(frame, self.page_nav, attr, value.strip(), partial(self.change_attr, bs, attr))
-            self.page_nav = idx
-            self.page_size += 1
-        if self.Mstart.string is not None:
-            # text entry
-            self.page_nav = self.make_entry(frame, self.page_nav, "", self.Mstart.text.strip(), partial(self.change_attr, self.Mstart, None))
-       
-
-                
-        
-    """
-                      
+            idx = self.make_entry(frame, idx, attr, value.strip(), partial(self.change_attr, bs, attr))
         if bs.string is not None:
             # text entry
-            print("GoooooooooooOOOOOOooogle")
             idx = self.make_entry(frame, idx, "", bs.text.strip(), partial(self.change_attr, bs, None))
         for child in children:
+            print('child type :{}::{}'.format(type(child),child))
             num_children = len(child.findChildren()) + len(child.attrs)
             if num_children == 0 and child.string is not None:
                 # special case of only 1 text - making entry
-               
                 idx = self.make_entry(frame, idx, child.name, child.string.strip(), partial(self.change_attr, child, None))
             elif num_children > 0:
                 # child has one attribute or one grandchild; make new frame
-                print("Bingooooooooooooooooooooooooooooo")
-                if self.page_size < self.attr_size:
-                    h = self.make_label_frame(frame, child)
-                    h.grid(row=idx, column=0, columnspan=2, sticky='ew', padx=10, pady=10)
-                    idx += 1
-            # else: tag has no children and no text; ignore
-    """
+                print("Goooooooooooooogle")
+                h = self.make_label_frame(frame, child)
+                h.grid(row=idx, column=0, columnspan=2, sticky='ew', padx=10, pady=10)
+                idx += 1
+                #self.display = VerticalScrolledFrame(self.data_frame)
+        #self.display.pack(pady=10,expand=True, fill=tk.BOTH)
+        #self.status.set("Loaded {} elements".format(len(AutoSelectEntry.elements)))
+ 
 
+    def my_display(self,page_number):
+        self.display.destroy()
+        
+        self.display = VerticalScrolledFrame(self.data_frame)
+        
+        frame = ttk.LabelFrame(self.display, text=self.Mstart)
+        bs = next(self.childe)
+        self.core = self.make_label_frame(frame, bs)
+        self.core.pack()
+        frame.pack()
+        
+        self.display.pack(pady=10,expand=True, fill=tk.BOTH)
+        self.page_number = page_number
+          
+                   
+    
     @staticmethod
     def make_entry(master, row, name, value, command):
         lbl = tk.Label(master, text=name, anchor='e')
@@ -484,7 +441,7 @@ class GUI(tk.Frame):
         frame = ttk.LabelFrame(master, text=bs.name)
         hlm = tk.Frame(frame)
         hlm.columnconfigure(0, weight=1)
-        self.make(hlm, bs)
+        self.making_item(hlm, bs)
         hlm.pack(side=tk.RIGHT)
         return frame
 

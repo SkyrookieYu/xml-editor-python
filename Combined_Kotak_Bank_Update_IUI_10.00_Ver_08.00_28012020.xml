@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Using Registry and CDI elements to write the already existing registry keys. Using Parameter for new key creation. -->
-<Update Bank = "KOTAK" Checksum="" CreatedBy="Sneha" CreatedOn="28-01-2020" Customer="Combined" IUI="10.00" OS="Win10" VerifiedBy="" VerifiedOn="" Version="08.00">
+<Update Bank="SBI" Checksum="" CreatedBy="Sneha" CreatedOn="28-01-2020" Customer="Combined" IUI="10.00" OS="Win10" VerifiedBy="" VerifiedOn="" Version="08.00">
   <Description Details="This update is meant only for the Fresh installation. Make sure all the pre-requisites have been met..."/>
-  <Contacts Name="Switch Help Desk" Number="080 - 61574236 Ext : 74236" contact_Name="Kotak Switch Team - FIS"/>
+  <Contacts Name="SERVICE HELP DESK" Number="080 - 61574236 Ext : 74236" contact_Name="Kotak Switch Team - FIS"/>
   <Contacts Name="Project Manager" Number="61954214/61954949" contact_Name="Ajay Patel"/>
-  <Contacts Name="MS Vendor" Number="022-61954340" contact_Name="NCR - Ravi Chandra"/>
+  <Contacts Name="MS  DHONI Vendor" Number="022-61954340" contact_Name="NCR - Ravi Chandra"/>
   <Contacts Name="Software Distribution" Number="NCR 022-66055788/89(D)PRIZM/Euronet Surendra Birwatkar:9320244704/Shweta Bhanage/Ajay Patel 022 61954662/022 61954949/EJ TEAM MEMBERS/Anurang/Leela/Euronet:Karan/Bharat/Vinod 09344542767/09344001718/09380766663/09361623409/09345177321/09380209605/044 39807607/044-39575009/044-39807607/49037488/49037416/9245177321/9344542767/9344001718/Prashant Singh-7045799170(TM Keys)Bios Password:-044-49037460/044-49037478/Basha-9380449217" contact_Name="Euronet (022-61997372/73)"/>
   <Contacts Name="SNMP" Number="" contact_Name=""/>
   <Contacts Name="Solidcore ePO/Hard Disk Encryption" Number="" contact_Name=""/>

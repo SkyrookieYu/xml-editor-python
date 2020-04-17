@@ -329,6 +329,7 @@ class Pagination(tk.Frame):
         return config
 
     def select_page(self, page_number, start_page=None):
+        
         self._current_page = page_number
         if start_page is None:
             if page_number < self._start_page:
@@ -346,6 +347,7 @@ class Pagination(tk.Frame):
         self._update_labels()
 
     def prev_page(self):
+        print('Prev Page')
         if self._current_page == 1: return
 
         if self._current_page == self._start_page:
@@ -401,6 +403,7 @@ class Pagination(tk.Frame):
 
     @property
     def current_page(self):
+        
         return self._current_page
     
     page = current_page
@@ -439,6 +442,7 @@ class Pagination(tk.Frame):
                 page_label.is_displayed = False
 
     def _on_click_page(self, new_page):
+        print('================================================')
         if new_page.page_number == self._current_page:
             return
 

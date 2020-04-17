@@ -221,6 +221,7 @@ class GUI(tk.Frame):
 
         self.fn = None
         self.bs = None
+        self.total_len = 0
         self.page_size = 0
         self.page_number = 0
         self.page_nav = 0
@@ -235,25 +236,28 @@ class GUI(tk.Frame):
         master.bind("<Control - s>", self.save)
         page = tk.Frame(self)
         page.pack()
-        self.row = tk.Frame(page)
-        self.row.pack(padx=20, pady=40, fill=tk.BOTH)
+        #self.row = tk.Frame(page)
+        
 
         self.top = FilePicker(self, command=self.load_file)
         self.top.pack(fill=tk.X)
 
         self.top.load_dir(opt.get('dir') or os.getcwd())
 
-        #self.data_frame = tk.Frame(self)
-        self.display = VerticalScrolledFrame(self.row)
+        self.data_frame = tk.Frame(self)
+        self.display = VerticalScrolledFrame(self.data_frame)
+        #self.row.pack(padx=20, pady=40, fill=tk.BOTH)
+
         #self.display = Pagination(self.row, 5, 100, pagination_style=pagination_style2)
         #self.display = Pagination(self.row, 5, 100, command=self.print_page, pagination_style=pagination_style2)
         #self.display.pack(pady=10,expand=True, fill=tk.BOTH)
-        #self.display.pack(fill=tk.BOTH, expand=True)
-        self.row.pack(fill=tk.BOTH, expand=True)
+        self.display.pack(fill=tk.BOTH, expand=True)
+        self.data_frame.pack(fill=tk.BOTH, expand=True)
 
         self.status = tk.StringVar(self, "Version: "+".".join(map(str,__version__)))
         lbl = ttk.Label(self, textvariable=self.status)
         lbl.pack(fill=tk.X)
+        self.childe = self.return_gen()
 
     def _quit(self):
         if opt.get('save_position'):
@@ -265,7 +269,8 @@ class GUI(tk.Frame):
 
     def return_gen(self):
         children = list(filter(istag, self.Mstart.children))
-        #print(children)
+        self.total_len = len(children)
+        print('Total Items in children :',self.total_len) 
         for child in children:
             yield child
 
@@ -293,7 +298,7 @@ class GUI(tk.Frame):
             del self.display
         self.Mstart = elements[0]
         
-        self.display = VerticalScrolledFrame(self.row)
+        self.display = VerticalScrolledFrame(self.data_frame)
         #self.display.pack(pady=10, anchor=W)
         #self.display.pack(pady=10, anchor=W)
         #self.display = Pagination(self.data_frame)
@@ -303,7 +308,8 @@ class GUI(tk.Frame):
                 lbl = tk.Label(hlm, text=comm, anchor='w', wraplength=300, justify=tk.LEFT)
                 lbl.pack(fill=tk.X)
             hlm.pack()
-        self.childe = self.return_gen()
+        
+        
             
         
         #self.core.pack()
@@ -311,7 +317,7 @@ class GUI(tk.Frame):
         self.core = self.make_label_frame(self.display, self.Mstart)
         self.core.pack()
         self.display.pack(pady=10,expand=True, fill=tk.BOTH)
-        self.page = Pagination(self.row, 5, 100, command=self.print_page, pagination_style=pagination_style2)
+        self.page = Pagination(self.data_frame, 1, 100, command=self.print_page, pagination_style=pagination_style2)
         self.page.pack(pady=10,expand=True, fill=tk.BOTH)
 
         #self.core.pack()
@@ -320,7 +326,8 @@ class GUI(tk.Frame):
     def print_page(self,page_number):
         print("yahooooooooooooo")
         #children = list(filter(istag, self.Mstart.children))
-        self.display = VerticalScrolledFrame(self.row)
+        self.display.destroy()
+        self.display = VerticalScrolledFrame(self.data_frame)
         frame = ttk.LabelFrame(self.display, text=self.Mstart)
         #self.display.destroy()
         #frame = tk.Frame(self.row)
@@ -353,14 +360,14 @@ class GUI(tk.Frame):
         elif num_children > 0:
                 # child has one attribute or one grandchild; make new frame
             print("Goooooooooooooogle :",self.page_nav)
-            self.core.pack()
+            #self.core.pack()
             h = self.make_label_frame(frame, child)
             h.grid(row=self.page_nav, column=0, columnspan=2, sticky='ew', padx=10, pady=10)
             #self.page.pack()
             self.page_nav += 1
         frame.pack()
         #self.display = VerticalScrolledFrame(self.data_frame)
-        self.display.pack(pady=10,expand=True, fill=tk.X)
+        self.display.pack(pady=10,expand=True, fill=tk.BOTH)
         
 
         self.status.set("Loaded {} elements".format(len(AutoSelectEntry.elements)))
@@ -389,9 +396,9 @@ class GUI(tk.Frame):
             self.status.set("cannot save - no file loaded")
             return
         name, ext = os.path.splitext(self.fn)
-        bkup_name = name + time.strftime("_%Y-%m-%d_%H-%M-%S") + ext + opt['backup_ext']
-        os.rename(self.fn, bkup_name)
-        print(self.fn, "backed up to", bkup_name)
+        #bkup_name = name + time.strftime("_%Y-%m-%d_%H-%M-%S") + ext + opt['backup_ext']
+        os.rename(self.fn, name)
+        print(self.fn, "backed up to", name)
 
         # whatever weirdness Andrew uses encodes in utf-16 and with windows-style line endings ... so I will too.
         # but beautifulsoup insists on normal output, so have to change it first.
@@ -423,14 +430,14 @@ class GUI(tk.Frame):
         num_attributes = len(bs.attrs)
 
         # list out the attributes, then text, then grandchildren.
-        print('Length {}'.format(len(bs.attrs)))
+        #print('Length {}'.format(len(bs.attrs)))
         print('Dict {}'.format(bs.attrs))
         self.attr_size = num_attributes
         for attr, value in bs.attrs.items():
             #print(attr)
             #print('Value :',value)
             # attribute entry
-            print("called for Page Number {}: Item Number{}".format(self.page_number,self.page_size))
+            #print("called for Page Number {}: Item Number{}".format(self.page_number,self.page_size))
             #if self.page_size < self.attr_size:
             idx = self.make_entry(frame, self.page_nav, attr, value.strip(), partial(self.change_attr, bs, attr))
             self.page_nav = idx

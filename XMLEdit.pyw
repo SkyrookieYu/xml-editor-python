@@ -393,9 +393,6 @@ class GUI(tk.Frame):
         if debug:
             print("{}: {} attributes; {} text; {} grandchildren".format(bs.name, num_attributes, num_text, len(children)))
 
-        # list out the attributes, then text, then grandchildren.
-       # print('Att size {}'.format(num_attributes))
-       # print('Dict {}'.format(bs.attrs))
         for attr, value in bs.attrs.items():
             # attribute entry
             idx = self.make_entry(frame, idx, attr, value.strip(), partial(self.change_attr, bs, attr))
@@ -458,10 +455,7 @@ class GUI(tk.Frame):
         self.display.pack(pady=10,expand=True, fill=tk.BOTH)
         #self.save()
  
-        
-          
-                   
-    
+
     @staticmethod
     def make_entry(master, row, name, value, command):
         lbl = tk.Label(master, text=name, anchor='e')
@@ -486,6 +480,7 @@ class GUI(tk.Frame):
         self.make(hlm, bs)
         hlm.pack(side=tk.RIGHT)
         return frame
+
     def dirty_status(self):
         changes = "{} unsaved changes".format(sum(x.dirty for x in AutoSelectEntry.elements))
         print(changes)
@@ -529,15 +524,7 @@ def main():
     root = tk.Tk()
     window = GUI(root)
     window.pack(fill=tk.BOTH, expand=True)
-    #page = tk.Frame()
-    #page.pack()
-    #row = tk.Frame(page)
-    #row.pack(padx=10, pady=4, fill=X)
-    #def print_page(page_number):
-    #    print("page number %s"%page_number)
 
-    #pagination = Pagination(row, 5, 100, command=print_page, pagination_style=pagination_style2)
-    #pagination.pack(pady=10, anchor=W)
     if len(sys.argv) > 1:
         window.top.load_path(" ".join(sys.argv[1:]))
     root.mainloop()

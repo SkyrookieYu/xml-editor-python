@@ -588,42 +588,5 @@ pagination_style5 = {
     }
 }
 
-#if __name__ == "__main__":
-    
- #   try:
-  #      from Tkinter import Tk
-    #    from tkMessageBox import showinfo
-   # except ImportError:
-     #   from tkinter import Tk
-      #  from tkinter.messagebox import showinfo
         
- #   root = Tk()
 
- #   page = tk.Frame()
- #   page.pack()
-
- #   def print_page(page_number):
-  #      print("page number %s"%page_number)
-
- #   row = tk.Frame(page)
- #   row.pack(padx=10, pady=4, fill=X)
-
-  #  tk.Label(row, text="Pagination").pack(anchor=W)
-    
- #   pagination = Pagination(row, 5, 100, command=print_page, pagination_style=pagination_style1)
-  #  pagination.pack(pady=10, anchor=W)
-
-    #pagination = Pagination(row, 5, 100, command=print_page, pagination_style=pagination_style2)
-    #pagination.pack(pady=10, anchor=W)
-
-    #pagination = Pagination(row, 5, 50, command=print_page,  pagination_style=pagination_style3)
-    #pagination.pack(pady=10, anchor=W)
-
-    #pagination = Pagination(row, 5, 100, command=print_page, pagination_style=pagination_style4)
-    #pagination.pack(pady=10, anchor=W)
-
-    #pagination = Pagination(row, 5, 100, command=print_page, pagination_style=pagination_style5)
-    #pagination.pack(pady=10, anchor=W)
-    
-    
- #   root.mainloop()

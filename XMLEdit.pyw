@@ -226,10 +226,11 @@ class GUI(tk.Frame):
         self.total_len = 0
         self.page_size = 0
         self.page_number = 0
-        self.page_nav = 0
+        self.page_naxt = 0
         self.attr_size = 0
         self.item=[]
         self.isSave = False
+        self.comments = []
         master.title("Config File Editor")
         icon = tk.PhotoImage(data=icondata)
         master.tk.call('wm', 'iconphoto', master._w, icon)
@@ -239,29 +240,19 @@ class GUI(tk.Frame):
         master.bind("<Control - s>", self.save)
         page = tk.Frame(self)
         page.pack()
-        #self.row = tk.Frame(page)
         
-
         self.top = FilePicker(self, command=self.load_file)
         self.top.pack(fill=tk.X)
-
         self.top.load_dir(opt.get('dir') or os.getcwd())
 
         self.data_frame = tk.Frame(self)
         self.display = VerticalScrolledFrame(self.data_frame)
-        #self.row.pack(padx=20, pady=40, fill=tk.BOTH)
-
-        #self.display = Pagination(self.row, 5, 100, pagination_style=pagination_style2)
-        #self.display = Pagination(self.row, 5, 100, command=self.print_page, pagination_style=pagination_style2)
-        #self.display.pack(pady=10,expand=True, fill=tk.BOTH)
         self.display.pack(fill=tk.BOTH, expand=True)
         self.data_frame.pack(fill=tk.BOTH, expand=True)
 
         self.status = tk.StringVar(self, "Version: "+".".join(map(str,__version__)))
         lbl = ttk.Label(self, textvariable=self.status)
         lbl.pack(fill=tk.X)
-        
-        
         
 
     def _quit(self):
@@ -274,8 +265,6 @@ class GUI(tk.Frame):
 
     def get_xml_items(self,start):
         children = list(filter(istag, start.children))
-        print('Text :',start.name)
-        #print('Yahoooooooooooooooooo')
         for child in children:
             self.item.append(child)
             #yield child
@@ -287,13 +276,12 @@ class GUI(tk.Frame):
         # "rb" mode is python 2 and 3 compatibe; BS handles the unicode conversion.
         with open(fn, 'rb') as f:
             self.bs = bs4.BeautifulSoup(f, 'xml')
-        elements, comments = [], []
+        elements = []
         for e in self.bs.contents:
             if istag(e):
-                #print(">>>>>>.>>>>>>>>>",e)
                 elements.append(e)
             elif isinstance(e, basestring):
-                comments.append(e)
+                self.comments.append(e)
             else:
                 print("WARNING: unidentified elements found:", e)
         if len(elements) > 1:
@@ -309,9 +297,9 @@ class GUI(tk.Frame):
         self.item = []
         self.get_xml_items(self.Mstart)
 
-        if comments:
+        if self.comments:
             hlm = ttk.LabelFrame(self.display, text="File Comments")
-            for comm in comments:
+            for comm in self.comments:
                 lbl = tk.Label(hlm, text=comm, anchor='w', wraplength=300, justify=tk.LEFT)
                 lbl.pack(fill=tk.X)
             hlm.pack()
@@ -319,25 +307,14 @@ class GUI(tk.Frame):
         children = list(filter(istag, self.Mstart.children))
         self.total_len = len(children)
         
-        #print('Total Items in children : ',next(self.childe) )
-        
         self.display.pack(pady=10,expand=True, fill=tk.BOTH)
         core = self.make_first_frame(self.display, self.Mstart)
         core.pack()
-        min=0
-        max = self.total_len
-        if self.total_len > 5:
-            min = 5
-        else :
-            max = self.total_len
-        self.page = Pagination(self.data_frame, 1, max+1, command=self.my_display, pagination_style=pagination_style2)
-        #self.page.pack(pady=10,expand=True, fill=tk.BOTH)
 
+        self.page = Pagination(self.data_frame, 1, self.total_len+1, command=self.my_display, pagination_style=pagination_style2)
         self.page.pack()
         
     
-    
-
     def save(self, event=None):
         print("Saving data")
 
@@ -401,7 +378,6 @@ class GUI(tk.Frame):
             idx = self.make_entry(frame, idx, "", bs.text.strip(), partial(self.change_attr, bs, None))
         
         for child in children:
-            #print('child type :{}::{}'.format(type(child),child))
             num_children = len(child.findChildren()) + len(child.attrs)
             if num_children == 0 and child.string is not None:
                 # special case of only 1 text - making entry
@@ -414,8 +390,6 @@ class GUI(tk.Frame):
     
     def make(self, frame, bs):
         idx = 0
-        
-        print("Bs ;;;;",bs.first)
         for attr, value in bs.attrs.items():
             # attribute entry
             idx = self.make_entry(frame, idx, attr, value.strip(), partial(self.change_attr, bs, attr))
@@ -426,34 +400,52 @@ class GUI(tk.Frame):
     def my_display(self,button_click):
         self.display.destroy()
         bs = []
-        if button_click is "Next":
-            bs = self.item[self.page_number]
-            self.page_number += 1
-        elif button_click is "First":
-            bs = self.item[0]
+        self.display = VerticalScrolledFrame(self.data_frame)
+        frame = ttk.LabelFrame(self.display, text=self.Mstart)
+
+        if button_click is "First":
+            if self.comments:
+                hlm = ttk.LabelFrame(self.display, text="File Comments")
+                for comm in self.comments:
+                    lbl = tk.Label(hlm, text=comm, anchor='w', wraplength=300, justify=tk.LEFT)
+                    lbl.pack(fill=tk.X)
+                hlm.pack()
+            core = self.make_first_frame(self.display, self.Mstart)
+            core.pack()
             self.page_number = 0
+            frame.pack()
+            self.display.pack(pady=10,expand=True, fill=tk.BOTH)
+            return
         elif button_click is "Prev":
             self.page_number -= 1
-            bs = self.item[self.page_number-1]
-
+            if self.page_number <= 0:
+                if self.comments:
+                    hlm = ttk.LabelFrame(self.display, text="File Comments")
+                    for comm in self.comments:
+                        lbl = tk.Label(hlm, text=comm, anchor='w', wraplength=300, justify=tk.LEFT)
+                        lbl.pack(fill=tk.X)
+                    hlm.pack()
+                core = self.make_first_frame(self.display, self.Mstart)
+                core.pack()
+                self.page_number = 0
+                frame.pack()
+                self.display.pack(pady=10,expand=True, fill=tk.BOTH)
+                return
+            else:
+                bs = self.item[self.page_number-1]
+        elif button_click is "Next":
+            bs = self.item[self.page_number]
+            self.page_number += 1
+            self.page_naxt = True
         elif button_click is "Last":
-            print("Last Button is clicked")
-            bs = self.item[self.total_len - 1]
-            self.page_number = self.total_len -1
-            #return frame
+            bs = self.item[self.total_len -1]
+            self.page_number = self.total_len 
 
-
-        self.display = VerticalScrolledFrame(self.data_frame)
-        
-        frame = ttk.LabelFrame(self.display, text=self.Mstart)
-        #bs = next(self.childe)
-        #self.item.append(bs)
         self.core = self.make_label_frame(frame, bs)
         self.core.pack()
         frame.pack()
-        
         self.display.pack(pady=10,expand=True, fill=tk.BOTH)
-        #self.save()
+
  
 
     @staticmethod

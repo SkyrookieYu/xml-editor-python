@@ -107,6 +107,7 @@ class Left_Control(Page_Control):
             if prev_button is not None:
                 self._previous_label = self._navigation_control(pagination, style, "prev", prev_button)
                 self._previous_label.pack(side=LEFT)
+
         else:
             self._first_label = self._navigation_control(pagination, style, "first", first_button)
             self._first_label.pack(side=LEFT)
@@ -156,12 +157,12 @@ class Pagination(tk.Frame):
 
         self._total_pages = total_pages        
         self._displayed_pages = displayed_pages
-        print(self._displayed_pages)
 
         self._left_controls = None
         self._right_controls = None
 
         self._current_page = current_page
+        self._current_button = None
         
         self._label_spacing = pagination_style.get("button_spacing", 0)
 
@@ -185,7 +186,18 @@ class Pagination(tk.Frame):
 
         self._page_frame = tk.Frame(self)
         self._page_frame.pack(side=LEFT)
+        page_label = Page_Label(self._page_frame, start_page, self._style_config, self._on_click_page, 1, False, is_displayed=True)
+        page_label.pack(side=LEFT)
+        
+        page_label = Page_Label(self._page_frame, '/', self._style_config, self._on_click_page, 0, False, is_displayed=True)
+        page_label.pack(side=LEFT, padx=(self._label_spacing, 0))
+        page_label = Page_Label(self._page_frame, self._total_pages, self._style_config, None, 0, False, is_displayed=False)
+        page_label.pack(side=LEFT, padx=(self._label_spacing, 0))
+        
+        for page_number in range(start_page, start_page + displayed_pages):
+            self._list_of_page_labels.append(page_label)
 
+        """
         for page_number in range(start_page, start_page + displayed_pages):
             is_selected = page_number == self._current_page
 
@@ -200,7 +212,9 @@ class Pagination(tk.Frame):
                 page_label = Page_Label(self._page_frame, page_number, self._style_config, self._on_click_page, is_selected, False, is_displayed=False)
     
             self._list_of_page_labels.append(page_label)
+        """
         if next_button is not None or last_button is not None:
+
             self._right_controls = Right_Control(self, self._style_config, last_button, next_button, spacing)
 
             if hide_controls_at_edge and end_page == total_pages:
@@ -213,6 +227,7 @@ class Pagination(tk.Frame):
 
         if self._hide_controls_at_edge:
             if self._left_controls is not None:
+
                 if self._start_page == 1:
                     if self._left_controls.is_displayed:
                         self._left_controls.is_displayed = False
@@ -223,6 +238,7 @@ class Pagination(tk.Frame):
                         self._left_controls.pack(side=LEFT, padx=(0, self._label_spacing), before=self._page_frame)
 
             if self._right_controls is not None:
+
                 if self._end_page == self._total_pages:
                     if self._right_controls.is_displayed:
                         self._right_controls.is_displayed = False
@@ -235,21 +251,21 @@ class Pagination(tk.Frame):
         for i, page_number in enumerate(range(self._start_page, self._end_page+1)):
             page_label = self._list_of_page_labels[i]
             page_label.page_number = page_number
-            
+
             if self._current_page == page_number:
                 if not page_label.is_selected:
                     page_label.change_state(SELECTED, NORMAL_STATE)
             else:
                 if page_label.is_selected:
                     page_label.change_state(NOT_SELECTED, NORMAL_STATE)
-
+   
             if not page_label.is_displayed:
                 page_label.is_displayed = True
-                if i == 0:
-                    page_label.pack(side=LEFT)
-                else:
-                    page_label.pack_configure(side=LEFT, padx=(self._label_spacing, 0))
-                    
+               # if i == 0:
+                #page_label.pack(side=LEFT)
+                #else:
+                page_label.pack_configure(side=RIGHT,padx=(self._label_spacing, 10))
+       
 
         for i in range(self._end_page-self._start_page+1, self._displayed_pages):
             page_label = self._list_of_page_labels[i]
@@ -329,7 +345,6 @@ class Pagination(tk.Frame):
         return config
 
     def select_page(self, page_number, start_page=None):
-        
         self._current_page = page_number
         if start_page is None:
             if page_number < self._start_page:
@@ -347,7 +362,6 @@ class Pagination(tk.Frame):
         self._update_labels()
 
     def prev_page(self):
-        print('Prev Page')
         if self._current_page == 1: return
 
         if self._current_page == self._start_page:
@@ -357,7 +371,8 @@ class Pagination(tk.Frame):
         self._current_page -= 1
         
         if self._command is not None:
-            self._command(self._current_page)
+            self._current_button = "Prev"
+            self._command(self._current_button)
 
         self._update_labels()
 
@@ -371,7 +386,8 @@ class Pagination(tk.Frame):
         self._current_page += 1
         
         if self._command is not None:
-            self._command(self._current_page)
+            self._current_button = "Next"
+            self._command(self._current_button)
 
         self._update_labels()
         
@@ -384,7 +400,8 @@ class Pagination(tk.Frame):
         self._current_page = 1
         
         if self._command is not None:
-            self._command(self._current_page)
+            self._current_button = "First"
+            self._command(self._current_button)
         
         self._update_labels()
 
@@ -397,7 +414,8 @@ class Pagination(tk.Frame):
         self._current_page = self._total_pages
         
         if self._command is not None:
-            self._command(self._current_page)
+            self._current_button = "Last"
+            self._command(self._current_button)
 
         self._update_labels()
 
@@ -442,7 +460,6 @@ class Pagination(tk.Frame):
                 page_label.is_displayed = False
 
     def _on_click_page(self, new_page):
-        print('================================================')
         if new_page.page_number == self._current_page:
             return
 
@@ -457,6 +474,7 @@ class Pagination(tk.Frame):
             self._command(self._current_page)
 
     def update(self, total_pages, current_page, start_page=1):
+
         end_page = min(total_pages, start_page + self._displayed_pages - 1)
 
         if not start_page <= current_page <= end_page:

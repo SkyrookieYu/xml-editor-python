@@ -5,6 +5,7 @@ from __future__ import print_function
 try:  # python2 imports
     import Tkinter as tk
     from tkMessageBox import showerror
+    from tkMessageBox import messagebox
     import ttk
     from tkFileDialog import askdirectory
     print('python2 detected')
@@ -13,6 +14,7 @@ except ImportError:  # try python3 imports
     from tkinter import ttk
     from tkinter.filedialog import askdirectory
     from tkinter.messagebox import showerror
+    from tkinter import messagebox
     basestring = str
     print('python3 detected')
 import re
@@ -229,7 +231,7 @@ class GUI(tk.Frame):
         self.page_naxt = 0
         self.attr_size = 0
         self.item=[]
-        self.isSave = False
+        self.isLoaded = True
         self.comments = []
         master.title("Config File Editor")
         icon = tk.PhotoImage(data=icondata)
@@ -277,6 +279,7 @@ class GUI(tk.Frame):
         with open(fn, 'rb') as f:
             self.bs = bs4.BeautifulSoup(f, 'xml')
         elements = []
+        self.comments = []
         for e in self.bs.contents:
             if istag(e):
                 elements.append(e)
@@ -289,20 +292,25 @@ class GUI(tk.Frame):
         assert elements, "No XML data found"
 
         if self.display is not None:
+            print('Destroying Display')
             self.display.destroy()
             del self.display
-       
+        
         self.Mstart = elements[0]
         self.display = VerticalScrolledFrame(self.data_frame)
         self.item = []
         self.get_xml_items(self.Mstart)
 
-        if self.comments:
+        if self.comments :
             hlm = ttk.LabelFrame(self.display, text="File Comments")
             for comm in self.comments:
                 lbl = tk.Label(hlm, text=comm, anchor='w', wraplength=300, justify=tk.LEFT)
                 lbl.pack(fill=tk.X)
             hlm.pack()
+        else :
+            hlm = ttk.LabelFrame(self.display, text="File Comments")
+            hlm.pack()
+
         
         children = list(filter(istag, self.Mstart.children))
         self.total_len = len(children)
@@ -310,9 +318,10 @@ class GUI(tk.Frame):
         self.display.pack(pady=10,expand=True, fill=tk.BOTH)
         core = self.make_first_frame(self.display, self.Mstart)
         core.pack()
-
-        self.page = Pagination(self.data_frame, 1, self.total_len+1, command=self.my_display, pagination_style=pagination_style2)
-        self.page.pack()
+        if self.isLoaded == True:
+            self.page = Pagination(self.data_frame, 1, self.total_len+1, command=self.my_display, pagination_style=pagination_style2)
+            self.page.pack()
+            self.isLoaded = False
         
     
     def save(self, event=None):
@@ -359,7 +368,6 @@ class GUI(tk.Frame):
 
         for element in AutoSelectEntry.elements:
             element.dirty = False
-        self.isSave = True
         self.status.set("File backed up and saved.")
     
     def making_item(self, frame, bs): 
@@ -440,7 +448,7 @@ class GUI(tk.Frame):
         elif button_click is "Last":
             bs = self.item[self.total_len -1]
             self.page_number = self.total_len 
-
+            
         self.core = self.make_label_frame(frame, bs)
         self.core.pack()
         frame.pack()

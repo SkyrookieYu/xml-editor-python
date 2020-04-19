@@ -409,7 +409,7 @@ class GUI(tk.Frame):
         self.display.destroy()
         bs = []
         self.display = VerticalScrolledFrame(self.data_frame)
-        frame = ttk.LabelFrame(self.display, text=self.Mstart)
+       # frame = ttk.LabelFrame(self.display, text=self.Mstart)
 
         if button_click is "First":
             if self.comments:
@@ -448,10 +448,10 @@ class GUI(tk.Frame):
         elif button_click is "Last":
             bs = self.item[self.total_len -1]
             self.page_number = self.total_len 
-            
-        self.core = self.make_label_frame(frame, bs)
+
+        self.core = self.make_label_frame(self.display, bs)
         self.core.pack()
-        frame.pack()
+        #frame.pack()
         self.display.pack(pady=10,expand=True, fill=tk.BOTH)
 
  
@@ -466,6 +466,7 @@ class GUI(tk.Frame):
         return row + 1
 
     def make_label_frame(self, master, bs):
+        print("Text Name :",bs.name)
         frame = ttk.LabelFrame(master, text=bs.name)
         hlm = tk.Frame(frame)
         hlm.columnconfigure(0, weight=1)

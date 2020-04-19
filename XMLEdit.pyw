@@ -255,7 +255,8 @@ class GUI(tk.Frame):
         self.status = tk.StringVar(self, "Version: "+".".join(map(str,__version__)))
         lbl = ttk.Label(self, textvariable=self.status)
         lbl.pack(fill=tk.X)
-        
+        self.page = Pagination(self.data_frame, 1, self.total_len+1, command=None, pagination_style=pagination_style2)
+        self.page.pack()
 
     def _quit(self):
         if opt.get('save_position'):
@@ -292,7 +293,6 @@ class GUI(tk.Frame):
         assert elements, "No XML data found"
 
         if self.display is not None:
-            print('Destroying Display')
             self.display.destroy()
             del self.display
         
@@ -318,10 +318,14 @@ class GUI(tk.Frame):
         self.display.pack(pady=10,expand=True, fill=tk.BOTH)
         core = self.make_first_frame(self.display, self.Mstart)
         core.pack()
-        if self.isLoaded == True:
-            self.page = Pagination(self.data_frame, 1, self.total_len+1, command=self.my_display, pagination_style=pagination_style2)
-            self.page.pack()
-            self.isLoaded = False
+        #if self.isLoaded == True:
+        if self.page is not None:
+            self.page.destroy()
+            del self.page
+
+        self.page = Pagination(self.data_frame, 1, self.total_len+1, command=self.my_display, pagination_style=pagination_style2)
+        self.page.pack()
+        self.isLoaded = False
         
     
     def save(self, event=None):
@@ -419,7 +423,6 @@ class GUI(tk.Frame):
             core = self.make_first_frame(self.display, self.Mstart)
             core.pack()
             self.page_number = 0
-            frame.pack()
             self.display.pack(pady=10,expand=True, fill=tk.BOTH)
             return
         elif button_click is "Prev":
@@ -434,7 +437,6 @@ class GUI(tk.Frame):
                 core = self.make_first_frame(self.display, self.Mstart)
                 core.pack()
                 self.page_number = 0
-                frame.pack()
                 self.display.pack(pady=10,expand=True, fill=tk.BOTH)
                 return
             else:
@@ -463,7 +465,6 @@ class GUI(tk.Frame):
         return row + 1
 
     def make_label_frame(self, master, bs):
-        print("Text Name :",bs.name)
         frame = ttk.LabelFrame(master, text=bs.name)
         hlm = tk.Frame(frame)
         hlm.columnconfigure(0, weight=1)

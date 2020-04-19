@@ -409,8 +409,6 @@ class GUI(tk.Frame):
         self.display.destroy()
         bs = []
         self.display = VerticalScrolledFrame(self.data_frame)
-       # frame = ttk.LabelFrame(self.display, text=self.Mstart)
-
         if button_click is "First":
             if self.comments:
                 hlm = ttk.LabelFrame(self.display, text="File Comments")
@@ -451,7 +449,6 @@ class GUI(tk.Frame):
 
         self.core = self.make_label_frame(self.display, bs)
         self.core.pack()
-        #frame.pack()
         self.display.pack(pady=10,expand=True, fill=tk.BOTH)
 
  

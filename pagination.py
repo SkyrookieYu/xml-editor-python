@@ -134,7 +134,7 @@ class Right_Control(Page_Control):
 
 class Pagination(tk.Frame):
 
-    def __init__(self, master, displayed_pages, total_pages, background=None, current_page=None, start_page=1, prev_button= "Prev", next_button="Next", first_button="First", last_button="Last", hide_controls_at_edge=False, command =None, pagination_style=None):
+    def __init__(self, master, displayed_pages, total_pages, background=None, current_page=None, start_page=1, prev_button= "Prev", next_button="Next", first_button="First", last_button="Last", hide_controls_at_edge=False, command=None, pagination_style=None):
         if pagination_style is None:
             raise Exception("No pagination style defined")
         
